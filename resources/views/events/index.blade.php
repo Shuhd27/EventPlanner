@@ -5,6 +5,14 @@
         </h2>
     </x-slot>
 
+    @if(session('success'))
+    <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+        class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 transition ease-in-out duration-300">
+        {{ session('success') }}
+    </div>
+    @endif
+
+
     <main class="mt-10">
         {{-- Meldingen --}}
         @if(session('success'))

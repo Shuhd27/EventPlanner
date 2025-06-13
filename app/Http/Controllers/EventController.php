@@ -35,16 +35,37 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        return view('events.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreEventRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'date' => 'required|date',
+            'location' => 'required|string|max:255',
+        ]);
+
+        try {
+            // Roep stored procedure aan
+            DB::statement('CALL sp_create_event(?, ?, ?, ?)', [
+                $request->input('title'),
+                $request->input('description'),
+                $request->input('date'),
+                $request->input('location'),
+            ]);
+
+            return redirect()->route('events.index')->with('success', 'Event succesvol toegevoegd!');
+        } catch (\Illuminate\Database\QueryException $e) {
+            \Log::error('Fout bij SP: ' . $e->getMessage());
+
+            // Geef foutmelding mee aan de view
+            return redirect()->back()->withInput()->with('error', 'Fout bij opslaan van het event. Probeer het later opnieuw.');
+        }
     }
+
+
 
     /**
      * Display the specified resource.
