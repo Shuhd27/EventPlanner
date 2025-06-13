@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use App\Http\Requests\StoreEventRequest;
-use App\Http\Requests\UpdateEventRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 
 class EventController extends Controller
 {
@@ -13,8 +15,20 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $events = DB::select('CALL sp_read_events()');
+            $error = null;
+        } catch (QueryException $e) {
+            \Log::error('Stored procedure error: ' . $e->getMessage());
+
+            $events = collect();
+            $error = 'Er is een fout opgetreden, probeer het later opnieuw.';
+        }
+
+        return view('events.index', compact('events', 'error'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.

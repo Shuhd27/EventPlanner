@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Event;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,5 +22,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
             'password' => 'cookie123',
         ]);
+
+        Event::factory(5)->create();
     }
 }

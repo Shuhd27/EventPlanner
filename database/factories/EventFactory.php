@@ -17,7 +17,10 @@ class EventFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => $this->faker->sentence(3, true), // Generates a title with 3 words
+            'description' => $this->faker->paragraph(), // Generates a random paragraph for description
+            'date' => $this->faker->dateTimeBetween('now', '+1 year'), // Generates a date between now and one year from now
+            'location' => $this->faker->city(), // Generates a random city name for location
         ];
     }
 }
